@@ -22,7 +22,7 @@ const getCurrentDay = () => {
 };
 
 // current day/month/year
-const currentYear = newDate().getFullYear();
+const currentYear = new Date().getFullYear();
 const currentMonth = getCurrentMonth();
 const currentDay = getCurrentDay();
 const currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
