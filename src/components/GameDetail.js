@@ -2,40 +2,62 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { smallImage } from '../util.js';
 
 function GameDetail() {
+  const history = useHistory();
+  // Exit detail
+  const exitDetailHandler = (e) => {
+    const element = e.target;
+    if (element.classList.contains('shadow')) {
+      document.body.style.overflow = 'auto';
+      history.push('/');
+    }
+  };
   // Get data
-  const { screen, game } = useSelector((state) => state.detail);
+  const { screen, game, isLoading } = useSelector((state) => state.detail);
   return (
-    <StyledCardShadow>
-      <StyledDetail>
-        <StyledStats>
-          <div className='rating'>
-            <h3>{game.name}</h3>
-            <p>Rating: {game.rating}</p>
-          </div>
-          <StyledInfo>
-            <h3>Platforms</h3>
-            <StyledPlatforms>
-              {game.platforms.map((data) => (
-                <h3 key={data.platform.id}>{data.platform.name}</h3>
+    <>
+      {!isLoading && (
+        <StyledCardShadow className='shadow' onClick={exitDetailHandler}>
+          <StyledDetail>
+            <StyledStats>
+              <div className='rating'>
+                <h3>{game.name}</h3>
+                <p>Rating: {game.rating}</p>
+              </div>
+              <StyledInfo>
+                <h3>Platforms</h3>
+                <StyledPlatforms>
+                  {game.platforms.map((data) => (
+                    <h3 key={data.platform.id}>{data.platform.name}</h3>
+                  ))}
+                </StyledPlatforms>
+              </StyledInfo>
+            </StyledStats>
+            <StyledMedia>
+              <img
+                src={smallImage(game.background_image, 1280)}
+                alt={game.name}
+              />
+            </StyledMedia>
+            <StyledDescription>
+              <p>{game.description_raw}</p>
+            </StyledDescription>
+            <div className='gallery'>
+              {screen.results.map((screen) => (
+                <img
+                  src={smallImage(screen.image, 1280)}
+                  alt={game.name}
+                  key={screen.id}
+                />
               ))}
-            </StyledPlatforms>
-          </StyledInfo>
-        </StyledStats>
-        <StyledMedia>
-          <img src={game.background_image} alt={game.name} />
-        </StyledMedia>
-        <StyledDescription>
-          <p>{game.description_raw}</p>
-        </StyledDescription>
-        <div className='gallery'>
-          {screen.results.map((screen) => (
-            <img src={screen.image} alt={game.name} key={screen.id} />
-          ))}
-        </div>
-      </StyledDetail>
-    </StyledCardShadow>
+            </div>
+          </StyledDetail>
+        </StyledCardShadow>
+      )}
+    </>
   );
 }
 
