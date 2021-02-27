@@ -12,6 +12,9 @@ import nintendo from '../img/nintendo.svg';
 import apple from '../img/apple.svg';
 import gamepad from '../img/gamepad.svg';
 import { applyMiddleware } from 'redux';
+// star rating icons
+import starEmpty from '../img/star-empty.png';
+import starFull from '../img/star-full.png';
 
 function GameDetail({ pathId }) {
   const history = useHistory();
@@ -23,6 +26,20 @@ function GameDetail({ pathId }) {
       history.push('/');
     }
   };
+  // Get star rating
+  const getStars = () => {
+    const stars = [];
+    const rating = Math.floor(game.rating);
+    for (let i = 1; i <= 5; i++) {
+      if (i <= rating) {
+        stars.push(<img alt='star' key={i} src={starFull}></img>);
+      } else {
+        stars.push(<img alt='star' key={i} src={starEmpty}></img>);
+      }
+    }
+    return stars;
+  };
+
   // Get platform icons
   const getPlatform = (platform) => {
     switch (platform) {
@@ -51,6 +68,7 @@ function GameDetail({ pathId }) {
               <div className='rating'>
                 <motion.h3 layoutId={`title ${pathId}`}>{game.name}</motion.h3>
                 <p>Rating: {game.rating}</p>
+                {getStars()}
               </div>
               <StyledInfo>
                 <h3>Platforms</h3>
@@ -129,6 +147,10 @@ const StyledStats = styled(motion.div)`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  img {
+    width: 2rem;
+    display: inline;
+  }
 `;
 
 const StyledInfo = styled(motion.div)`
