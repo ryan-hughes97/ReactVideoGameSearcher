@@ -4,6 +4,14 @@ import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { smallImage } from '../util.js';
+// platform icons
+import playstation from '../img/playstation.svg';
+import steam from '../img/steam.svg';
+import xbox from '../img/xbox.svg';
+import nintendo from '../img/nintendo.svg';
+import apple from '../img/apple.svg';
+import gamepad from '../img/gamepad.svg';
+import { applyMiddleware } from 'redux';
 
 function GameDetail({ pathId }) {
   const history = useHistory();
@@ -13,6 +21,23 @@ function GameDetail({ pathId }) {
     if (element.classList.contains('shadow')) {
       document.body.style.overflow = 'auto';
       history.push('/');
+    }
+  };
+  // Get platform icons
+  const getPlatform = (platform) => {
+    switch (platform) {
+      case 'Playstation 4':
+        return playstation;
+      case 'Xbox One':
+        return xbox;
+      case 'PC':
+        return steam;
+      case 'Nintendo Switch':
+        return nintendo;
+      case 'iOS':
+        return apple;
+      default:
+        return gamepad;
     }
   };
   // Get data
@@ -31,7 +56,11 @@ function GameDetail({ pathId }) {
                 <h3>Platforms</h3>
                 <StyledPlatforms>
                   {game.platforms.map((data) => (
-                    <h3 key={data.platform.id}>{data.platform.name}</h3>
+                    <img
+                      key={data.platform.id}
+                      src={getPlatform(data.platform.name)}
+                      alt={data.platform.name}
+                    ></img>
                   ))}
                 </StyledPlatforms>
               </StyledInfo>
@@ -68,6 +97,7 @@ const StyledCardShadow = styled(motion.div)`
   overflow-y: scroll;
   background: rgba(0, 0, 0, 0.5);
   position: fixed;
+  z-index: 5;
   top: 0;
   left: 0;
   &::-webkit-scrollbar {
